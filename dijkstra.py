@@ -17,7 +17,7 @@ def dijkstra(matrice):
             #if i == 1 & j == 1:
                 #matriceR[3][1] = find_shortest_path(matrice, 3, 1)
             matriceR[i][j] = find_shortest_path(matrice, i, j)
-        if i == 4:
+        if i == 7:
             break
 
 
