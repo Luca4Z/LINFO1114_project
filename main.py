@@ -34,3 +34,19 @@ with open('matrice.csv', 'r') as f:
     print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Dijkstra:\n", matrice_dijkstra)
     print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Bellman-Ford:\n", matrice_dijkstra)
     print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Floyd-Warshall:\n", matrice_dijkstra)
+
+# Solution normalment:
+"""
+/ A B C D E F G H I J
+A 0 3 1 3 . . 4 . . .
+B 3 0 . . . . . . . .
+C 1 2 0 . . . . . . .
+D 3 6 4 0 . . . . . .
+E 3 3 2 5 0 . . . . .
+F . . . . . 0 . . . .
+G . 4 . . . . 0 . . .
+H . . . . . . . 0 . .
+I . . . . . . . . 0 .
+J . . . . . . . . . 0
+
+"""
