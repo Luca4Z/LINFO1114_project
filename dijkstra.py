@@ -8,20 +8,27 @@ def dijkstra(matrice):
 
     # l'algorithme de Dijkstra calcule les distances de tout noeud au départ d'un noeud de départ prédéfini et devront donc être exécutés dans une boucle permettant le calcul de toutes les distances entre noeuds.
     """
-    # TODO OK
+    
+    # Créons une matrice vide, de départ
     matriceR = create_empty_matrice(len(matrice), len(matrice[0]))
 
+    # pour chaque noeud calculons la distance du plus court chemin. Comme la matric est symétrique. Dx = [0, len(matrice)] et Dy = [0, x]
     for i in range(len(matrice)):
         for j in range(i+1):
             matriceR[i][j] = find_shortest_path(matrice, i, j)
 
-
-
-    #print(numpy.matrix(symétrie(matriceR)))
+    # ajouter la symétrie, pour que la matrice soit complète
     return add_symétrie(matriceR)
 
 def create_empty_matrice(row, columns):
+    """
+    @pre: Un INT, le nombre de rangées
+          Un INT, le nombre de colonnes
+    @post: une matrice[][] E vide, de longueur et hauteur spécifié par les arguments
+    """
+
     matrice = []
+
     for _ in range(row):
         tempMatrice = []
         for _ in range(columns):
@@ -30,8 +37,12 @@ def create_empty_matrice(row, columns):
     return matrice
 
 def create_init_table(startNode):
+    """
+    @pre: un INT, le noeud de départ (A=0, B=1, ...)
+    @post: une matrice[][] contenant l'initialisation du tableau. Le noeud de départ vaut 0, les autres l'infini (représenté par 999).
+
+    """
     matrice = create_empty_matrice(10, 10)
-    #hashMap = {0: "A", 1: "B", 2: "C", 3: "D", 4: "E", 5: "F", 6: "G", 7: "H", 8: "I", 9: "J"}
     for i in range(len(matrice)):
         if startNode == i :
             matrice[i][0] = -1
@@ -40,80 +51,75 @@ def create_init_table(startNode):
     return matrice
 
 def find_shortest_path(matriceC, startNode, endNode):
+    """
+    @pre: une matrice[][] de coût
+          INT le noeud de départ (0=A, 1=B, ...)
+          INT le noeud d'arrivée (0=A, 1=B, ...)
+    @post: le coût de la distance du plus court chemin entre startNode et endNode 
+    """
     if startNode == endNode :
         return 0
-    else:
     
-        matriceInit = create_init_table(startNode)
-        costs = {0: matriceInit[0][0], 1: matriceInit[1][0], 2: matriceInit[2][0], 3: matriceInit[3][0], 4: matriceInit[4][0], 5: matriceInit[5][0], 6: matriceInit[6][0], 7: matriceInit[7][0], 8: matriceInit[8][0], 9: matriceInit[9][0]}
-        #print("costs:", costs)
-        smallestNode = startNode
-        node = startNode
-        smallestCostTemp = 99999999999
-        smallestCost = 0
-        fridge = [startNode]
-        #print(startNode, endNode)
-        for i in range (len(matriceInit)):
-            #print("node:", node, "fridge:", fridge)
-            for j in range(len(matriceInit[0])):
+    
+    matriceInit = create_init_table(startNode)
+
+    # Créons un dictionnaire qui mémorisera les coûts minimales de chaque noeud
+    costs = {0: matriceInit[0][0], 1: matriceInit[1][0], 2: matriceInit[2][0], 3: matriceInit[3][0], 4: matriceInit[4][0], 5: matriceInit[5][0], 6: matriceInit[6][0], 7: matriceInit[7][0], 8: matriceInit[8][0], 9: matriceInit[9][0]}
+
+    # Définissons des variables utiles, tels que le frigo, le plus petit coût total et temporaire et le noeud de départ
+    smallestNode = startNode
+    node = startNode
+    smallestCostTemp = 99999999999
+    smallestCost = 0
+    fridge = [startNode]
+
+    for i in range (len(matriceInit)):
+        for j in range(len(matriceInit[0])):
+
+            # Obtenir le coût entre le noeud et le noeud j
+            cost = matriceC[node][j]
+
+            # Vérifiér si le coût est inférieur au coût minimale jusqu'à présent, et que le noeud n'est pas encore dans le frigo
+            if cost < smallestCostTemp and j not in fridge and cost:
+                smallestCostTemp = cost
+                smallestNode = j
+            
+            # Ajuster le dictionnaire des coûts du noeud J si le coût actuelle est infiérieur à son coût au temps i-1
+            if costs[j] > cost + smallestCost and costs[j] != -1:
                 cost = matriceC[node][j]
-                if cost < smallestCostTemp and j not in fridge and cost:
-                    smallestCostTemp = cost
-                    smallestNode = j
-                if costs[j] > cost + smallestCost and costs[j] != -1:
-                    cost = matriceC[node][j]
-                    #print("smallest cost of node 1!ç! is", costs[1])
-                    costs[j] = cost+smallestCost
-                    #print("smallest cost of node 1!ç! is", costs[1])
-                #print("smallest cost of node", j, "is", costs[j])
-            # check previous smallest:
-            for k in range(len(matriceInit)):
-                if smallestCostTemp+smallestCost > costs[k] and k not in fridge:
-                    #print("changes")
-                    smallestCostTemp = costs[k]
-                    smallestNode = k
-                    smallestCost = 0 # on ajoute costs[k] après
-            #print("smallest c is", smallestCostTemp+smallestCost)
-            fridge.append(smallestNode)
-            costs[smallestNode] = -1
-            node = smallestNode
-            smallestCost += smallestCostTemp
-            #print(costs)
+                costs[j] = cost+smallestCost
 
+        # Trouvons le noeud avec la distance le plus court. Soit il se trouve à partir du noeud sur lequel on vient d'arriver, soit c'est un ancien noeud:
+        for k in range(len(matriceInit)):
+            if smallestCostTemp+smallestCost > costs[k] and k not in fridge:
+                smallestCostTemp = costs[k]
+                smallestNode = k
+                smallestCost = 0
 
-            
-            
-            #print("plus petit coût entre", startNode, "et quelconque", "vaut:", smallestCost, "avec le noeud", smallestNode)
-            
-            
-            if smallestNode == endNode:
-                #print("fin. plus petit coût entre", startNode, "et", endNode, "-->", smallestCost)
-                return smallestCost
-            smallestCostTemp = 300000
-                
-            #break
-        #print(matriceC[startNode][endNode])
+        # Ajouter dans le frigo le noeud avec la distance la plus coûrte et lui assigner un coût de -1 pour ne plus le considérer
+        fridge.append(smallestNode)
+        costs[smallestNode] = -1
+        node = smallestNode
 
-        #print(numpy.matrix(matriceInit))
-        return "?"
+        # Augmenter le coût
+        smallestCost += smallestCostTemp
+        
+        # Vérifier si nous sommes arrivés au noeud de fin 'endNode'
+        if smallestNode == endNode:
+            return smallestCost
+        
+        # Remmetre smallestCostTemp à une valeur élévé pour l'itération suivante
+        smallestCostTemp = 300000
+
+    return "/"
 
 def add_symétrie(matrice):
+    """
+    @pre: une matrice[][] remplit à moitie, la partie bas-gauche
+    @post: une matrice[][] R remplit symétrique 
+
+    """
     for i in range(len(matrice)):
         for j in range(len(matrice[0])):
             matrice[i][j] = matrice[j][i]
     return matrice
-
-mC = [
-        [0, 5, 1, 3, 99999999, 99999999, 99999999, 99999999, 99999999, 99999999], 
-        [5, 0, 2, 99999999, 3, 99999999, 4, 99999999, 99999999, 99999999], 
-        [1, 2, 0, 5, 3, 1, 99999999, 99999999, 99999999, 99999999], 
-        [3, 99999999, 5, 0, 99999999, 4, 99999999, 99999999, 2, 99999999], 
-        [99999999, 3, 3, 99999999, 0, 1, 2, 2, 99999999, 99999999],
-        [99999999, 99999999, 1, 4, 1, 0, 99999999, 3, 4, 99999999], 
-        [99999999, 4, 99999999, 99999999, 2, 99999999, 0, 2, 99999999, 5], 
-        [99999999, 99999999, 99999999, 99999999, 2, 3, 2, 0, 5, 2], 
-        [99999999, 99999999, 99999999, 2, 99999999, 4, 99999999, 5, 0, 5], 
-        [99999999, 99999999, 99999999, 99999999, 99999999, 99999999, 5, 2, 5, 0]
-    ]
-
-dijkstra(mC)
