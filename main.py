@@ -31,9 +31,9 @@ with open('matrice.csv', 'r') as f:
     matrice_floyd_warshall = floyd_warshall(matrice_c)
     
     print("La matrice de coût:\n", numpy.matrix(matrice_c)) # "Avec numpy, c'est censé mieux afficher la matrice"
-    print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Dijkstra:\n", matrice_dijkstra)
-    print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Bellman-Ford:\n", matrice_dijkstra)
-    print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Floyd-Warshall:\n", matrice_dijkstra)
+    print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Dijkstra:\n", numpy.matrix(matrice_dijkstra))
+    print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Bellman-Ford:\n", matrice_bellman_ford)
+    print("\nLa matrice des distances des plus courts chemins entre toutes paires de noeuds en utilisant l'algorithme de Floyd-Warshall:\n", matrice_floyd_warshall)
 
 # Solution normalment:
 """

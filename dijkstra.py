@@ -8,23 +8,17 @@ def dijkstra(matrice):
 
     # l'algorithme de Dijkstra calcule les distances de tout noeud au départ d'un noeud de départ prédéfini et devront donc être exécutés dans une boucle permettant le calcul de toutes les distances entre noeuds.
     """
-    # TODO
+    # TODO OK
     matriceR = create_empty_matrice(len(matrice), len(matrice[0]))
-    matriceInit = create_init_table(3)
 
     for i in range(len(matrice)):
         for j in range(i+1):
-            #if i == 1 & j == 1:
-                #matriceR[3][1] = find_shortest_path(matrice, 3, 1)
             matriceR[i][j] = find_shortest_path(matrice, i, j)
-        if i == 7:
-            break
 
 
 
-    print(numpy.matrix(matriceR))
-    #print(numpy.matrix(matriceInit))
-    return [[]]
+    #print(numpy.matrix(symétrie(matriceR)))
+    return add_symétrie(matriceR)
 
 def create_empty_matrice(row, columns):
     matrice = []
@@ -52,15 +46,15 @@ def find_shortest_path(matriceC, startNode, endNode):
     
         matriceInit = create_init_table(startNode)
         costs = {0: matriceInit[0][0], 1: matriceInit[1][0], 2: matriceInit[2][0], 3: matriceInit[3][0], 4: matriceInit[4][0], 5: matriceInit[5][0], 6: matriceInit[6][0], 7: matriceInit[7][0], 8: matriceInit[8][0], 9: matriceInit[9][0]}
-        print("costs:", costs)
+        #print("costs:", costs)
         smallestNode = startNode
         node = startNode
         smallestCostTemp = 99999999999
         smallestCost = 0
         fridge = [startNode]
-        print(startNode, endNode)
+        #print(startNode, endNode)
         for i in range (len(matriceInit)):
-            print("node:", node, "fridge:", fridge)
+            #print("node:", node, "fridge:", fridge)
             for j in range(len(matriceInit[0])):
                 cost = matriceC[node][j]
                 if cost < smallestCostTemp and j not in fridge and cost:
@@ -69,23 +63,22 @@ def find_shortest_path(matriceC, startNode, endNode):
                 if costs[j] > cost + smallestCost and costs[j] != -1:
                     cost = matriceC[node][j]
                     #print("smallest cost of node 1!ç! is", costs[1])
-                    #if cost + smallestCOst < costs[j]
                     costs[j] = cost+smallestCost
-                    print("smallest cost of node 1!ç! is", costs[1])
-                print("smallest cost of node", j, "is", costs[j])
+                    #print("smallest cost of node 1!ç! is", costs[1])
+                #print("smallest cost of node", j, "is", costs[j])
             # check previous smallest:
             for k in range(len(matriceInit)):
-                if smallestCostTemp > costs[k] and k not in fridge:
-                    print("changes")
+                if smallestCostTemp+smallestCost > costs[k] and k not in fridge:
+                    #print("changes")
                     smallestCostTemp = costs[k]
                     smallestNode = k
                     smallestCost = 0 # on ajoute costs[k] après
-            print("smallest is", smallestCostTemp)
+            #print("smallest c is", smallestCostTemp+smallestCost)
             fridge.append(smallestNode)
             costs[smallestNode] = -1
             node = smallestNode
             smallestCost += smallestCostTemp
-            print(costs)
+            #print(costs)
 
 
             
@@ -94,7 +87,7 @@ def find_shortest_path(matriceC, startNode, endNode):
             
             
             if smallestNode == endNode:
-                print("fin. plus petit coût entre", startNode, "et", endNode, "-->", smallestCost)
+                #print("fin. plus petit coût entre", startNode, "et", endNode, "-->", smallestCost)
                 return smallestCost
             smallestCostTemp = 300000
                 
@@ -104,7 +97,11 @@ def find_shortest_path(matriceC, startNode, endNode):
         #print(numpy.matrix(matriceInit))
         return "?"
 
-
+def add_symétrie(matrice):
+    for i in range(len(matrice)):
+        for j in range(len(matrice[0])):
+            matrice[i][j] = matrice[j][i]
+    return matrice
 
 mC = [
         [0, 5, 1, 3, 99999999, 99999999, 99999999, 99999999, 99999999, 99999999], 
